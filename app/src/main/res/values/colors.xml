@@ -22,16 +22,23 @@
 
     <!-- Background color for app -->
     <color name="tan_background">#FFF7DA</color>
+    <color name="white_background">#FFFFFF</color>
 
     <!-- Background color for the numbers category -->
     <color name="category_numbers">#FD8E09</color>
+    <color name="numbers_activity_background">#FFBF73</color>
+
 
     <!-- Background color for the family members category -->
     <color name="category_family">#379237</color>
+    <color name="family_activities_background">#86CB81</color>
 
     <!-- Background color for the colors category -->
     <color name="category_colors">#8800A0</color>
+    <color name="colors_activity_background">#C27CCE</color>
 
     <!-- Background color for the phrases category -->
     <color name="category_phrases">#16AFCA</color>
+    <color name="phrases_activity_background">#79E4F7</color>
+
 </resources>
