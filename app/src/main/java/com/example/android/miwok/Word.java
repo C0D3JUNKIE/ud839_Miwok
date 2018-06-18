@@ -25,6 +25,15 @@ public class Word {
     this.audioPosition = audioPosition;
   }
 
+  @Override
+  public String toString() {
+    return "Word{" +
+        "defaultTranslationText = " + defaultTranslationText + '\'' +
+        ", miwokTranslationText = " + miwokTranslationText + '\'' +
+        ", audioPosition = " + audioPosition +
+        ", displayImageResourceId = " + displayImageResourceId + '}';
+  }
+
   public String getDefaultTranslationText() {
     return defaultTranslationText;
   }
@@ -41,9 +50,7 @@ public class Word {
     return displayImageResourceId != NO_IMAGE_PROVIDED;
   }
 
-  public int getAudioPosition() {
-    return audioPosition;
-  }
+  public int getAudioPosition() { return audioPosition; }
 
   //  public void setDefaultTranslationText(String defaultTranslationText) {
 //    this.defaultTranslationText = defaultTranslationText;

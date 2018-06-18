@@ -15,9 +15,14 @@
  */
 package com.example.android.miwok;
 
+import android.content.Context;
+import android.media.AudioManager;
+import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -28,10 +33,35 @@ public class PhrasesActivity extends AppCompatActivity {
 
     private MediaPlayer mediaPlayer;
 
+    private MediaPlayer.OnCompletionListener completionListener = new OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mediaPlayer) {
+            releaseMediaPlayer();
+        }
+    };
+
+  private AudioManager audioManager;
+
+  private AudioManager.OnAudioFocusChangeListener onAudioFocusChangeListener = new OnAudioFocusChangeListener() {
+    @Override
+    public void onAudioFocusChange(int i) {
+      if(i == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || i == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK){
+        mediaPlayer.pause();
+        mediaPlayer.seekTo(0);
+      }else if(i == AudioManager.AUDIOFOCUS_GAIN){
+        mediaPlayer.start();
+      }else if(i == AudioManager.AUDIOFOCUS_LOSS){
+        releaseMediaPlayer();
+      }
+    }
+  };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phrases);
+
+      audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         final ArrayList<Word> words = new ArrayList<Word>();
 
@@ -47,18 +77,59 @@ public class PhrasesActivity extends AppCompatActivity {
         words.add(new Word("Come here.", "enni'nem", R.raw.phrase_come_here));
 
         WordAdapter itemsAdapter = new WordAdapter(this, words, R.color.phrases_activity_background);
-        ListView listView = (ListView) findViewById(R.id.lv_phrases_word_view);
+
+        ListView listView = findViewById(R.id.lv_phrases_word_view);
         listView.setAdapter(itemsAdapter);
 
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                Word word = words.get(i);
+              releaseMediaPlayer();
 
-                MediaPlayer mediaPlayer = MediaPlayer.create(PhrasesActivity.this, word.getAudioPosition());
+              Word word = words.get(i);
+
+              Log.v("PhrasesActivity", "Current word: " + word);
+
+              int result = audioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+
+              if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
+                mediaPlayer = MediaPlayer.create(PhrasesActivity.this, word.getAudioPosition());
                 mediaPlayer.start();
+                mediaPlayer.setOnCompletionListener(completionListener);
+              }
             }
         });
     }
+
+
+  @Override
+  protected void onStart() {
+    super.onStart();
+    Log.v("PHRASES ACTIVITY","State Change: onStartCalled");
+  }
+
+  @Override
+  protected void onStop() {
+    super.onStop();
+    Log.v("PHRASES ACTIVITY","State Change: onStopCalled");
+    releaseMediaPlayer();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    Log.v("PHRASES ACTIVITY","State Change: onDestroyCalled");
+  }
+
+
+  private void releaseMediaPlayer(){
+
+        if(mediaPlayer != null){
+            mediaPlayer.release();
+            mediaPlayer = null;
+          audioManager.abandonAudioFocus(onAudioFocusChangeListener);
+        }
+  }
+
 }
