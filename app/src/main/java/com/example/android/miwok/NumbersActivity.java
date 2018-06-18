@@ -45,21 +45,22 @@ public class NumbersActivity extends AppCompatActivity {
   private AudioManager.OnAudioFocusChangeListener onAudioFocusChangeListener = new OnAudioFocusChangeListener() {
     @Override
     public void onAudioFocusChange(int i) {
-      if(i == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || i == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK){
+      if (i == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT
+          || i == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
         mediaPlayer.pause();
         mediaPlayer.seekTo(0);
-      }else if(i == AudioManager.AUDIOFOCUS_GAIN){
+      } else if (i == AudioManager.AUDIOFOCUS_GAIN) {
         mediaPlayer.start();
-      }else if(i == AudioManager.AUDIOFOCUS_LOSS){
+      } else if (i == AudioManager.AUDIOFOCUS_LOSS) {
         releaseMediaPlayer();
       }
     }
   };
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_numbers);
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_numbers);
 
 //        String[] numbersOneToTen = new String[] {"one","two","three","four","five","six","seven","eight","nine","ten"};
 //
@@ -104,72 +105,74 @@ public class NumbersActivity extends AppCompatActivity {
 //      wordView.setText(numbersArrayList.get(0));
 //      numbersView.addView(wordView);
 
-      audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+    audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-      final ArrayList<Word> words = new ArrayList<Word>();
+    final ArrayList<Word> words = new ArrayList<Word>();
 
-      words.add(new Word("one", "lutti", R.drawable.number_one, R.raw.number_one));
-      words.add(new Word("two", "otiiko", R.drawable.number_two, R.raw.number_two));
-      words.add(new Word("three", "tolookosu", R.drawable.number_three, R.raw.number_three));
-      words.add(new Word("four", "oyyisa", R.drawable.number_four, R.raw.number_four));
-      words.add(new Word("five", "massokka", R.drawable.number_five, R.raw.number_five));
-      words.add(new Word("six", "temmokka", R.drawable.number_six, R.raw.number_six));
-      words.add(new Word("seven", "kenekaku", R.drawable.number_seven, R.raw.number_seven));
-      words.add(new Word("eight", "kawinta", R.drawable.number_eight, R.raw.number_eight));
-      words.add(new Word("nine", "wo'e", R.drawable.number_nine, R.raw.number_nine));
-      words.add(new Word("ten", "na'aacha", R.drawable.number_ten, R.raw.number_ten));
+    words.add(new Word("one", "lutti", R.drawable.number_one, R.raw.number_one));
+    words.add(new Word("two", "otiiko", R.drawable.number_two, R.raw.number_two));
+    words.add(new Word("three", "tolookosu", R.drawable.number_three, R.raw.number_three));
+    words.add(new Word("four", "oyyisa", R.drawable.number_four, R.raw.number_four));
+    words.add(new Word("five", "massokka", R.drawable.number_five, R.raw.number_five));
+    words.add(new Word("six", "temmokka", R.drawable.number_six, R.raw.number_six));
+    words.add(new Word("seven", "kenekaku", R.drawable.number_seven, R.raw.number_seven));
+    words.add(new Word("eight", "kawinta", R.drawable.number_eight, R.raw.number_eight));
+    words.add(new Word("nine", "wo'e", R.drawable.number_nine, R.raw.number_nine));
+    words.add(new Word("ten", "na'aacha", R.drawable.number_ten, R.raw.number_ten));
 
-      //Binding WordAdapter to list view.
-      WordAdapter itemsAdapter = new WordAdapter(this, words, R.color.numbers_activity_background);
+    //Binding WordAdapter to list view.
+    WordAdapter itemsAdapter = new WordAdapter(this, words, R.color.numbers_activity_background);
 
-      ListView listView = findViewById(R.id.lv_numbers_word_view);
-      listView.setAdapter(itemsAdapter);
+    ListView listView = findViewById(R.id.lv_numbers_word_view);
+    listView.setAdapter(itemsAdapter);
 
-      listView.setOnItemClickListener(new OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    listView.setOnItemClickListener(new OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-          releaseMediaPlayer();
+        releaseMediaPlayer();
 
-          Word word = words.get(i);
+        Word word = words.get(i);
 
-          Log.v("NumbersActivity", "Current word: " + word);
+        Log.v("NumbersActivity", "Current word: " + word);
 
-          int result = audioManager.requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+        int result = audioManager
+            .requestAudioFocus(onAudioFocusChangeListener, AudioManager.STREAM_MUSIC,
+                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 
-          if(result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
-            mediaPlayer = MediaPlayer.create(NumbersActivity.this, word.getAudioPosition());
-            mediaPlayer.start();
-            mediaPlayer.setOnCompletionListener(completionListener);
-          }
-
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+          mediaPlayer = MediaPlayer.create(NumbersActivity.this, word.getAudioPosition());
+          mediaPlayer.start();
+          mediaPlayer.setOnCompletionListener(completionListener);
         }
-      });
 
-    }
+      }
+    });
+
+  }
 
   @Override
   protected void onStart() {
     super.onStart();
-    Log.v("NUMBERS ACTIVITY","State Change: onStartCalled");
+    Log.v("NUMBERS ACTIVITY", "State Change: onStartCalled");
   }
 
   @Override
   protected void onStop() {
     super.onStop();
-    Log.v("NUMBERS ACTIVITY","State Change: onStopCalled");
+    Log.v("NUMBERS ACTIVITY", "State Change: onStopCalled");
     releaseMediaPlayer();
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    Log.v("NUMBERS ACTIVITY","State Change: onDestroyCalled");
+    Log.v("NUMBERS ACTIVITY", "State Change: onDestroyCalled");
   }
 
-  private void releaseMediaPlayer(){
+  private void releaseMediaPlayer() {
 
-    if(mediaPlayer != null){
+    if (mediaPlayer != null) {
       mediaPlayer.release();
       mediaPlayer = null;
       audioManager.abandonAudioFocus(onAudioFocusChangeListener);

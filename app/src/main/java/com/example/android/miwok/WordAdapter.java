@@ -17,7 +17,8 @@ public class WordAdapter extends ArrayAdapter<Word> {
 
   private int colorResourceId;
 
-  public WordAdapter(@NonNull Context context, ArrayList<Word> translatedWord, int colorResourceId) {
+  public WordAdapter(@NonNull Context context, ArrayList<Word> translatedWord,
+      int colorResourceId) {
     super(context, 0, translatedWord);
     this.colorResourceId = colorResourceId;
   }
@@ -27,7 +28,7 @@ public class WordAdapter extends ArrayAdapter<Word> {
   public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
     View listItemView = convertView;
-    if(listItemView == null){
+    if (listItemView == null) {
       listItemView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
     }
 

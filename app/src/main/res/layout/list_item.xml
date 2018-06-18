@@ -2,11 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/ll_list_items"
-  android:orientation="horizontal"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  android:background="@color/tan_background"
   android:minHeight="@dimen/list_item_height"
-  android:background="@color/tan_background">
+  android:orientation="horizontal">
 
   <ImageView
     android:id="@+id/iv_image"
@@ -14,32 +14,47 @@
     android:layout_height="wrap_content"
     android:padding="16dp"/>
 
-  <LinearLayout
-    android:id="@+id/translation_text_views"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white_background"
-    android:paddingLeft="16dp">
+  <RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
 
-    <TextView
-      android:id="@+id/miwok_text_view"
+    <LinearLayout
+      android:id="@+id/translation_text_views"
       android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:layout_weight="1"
-      android:gravity="bottom"
-      android:textStyle="bold"
-      android:textSize="22dp"
-      android:textColor="@color/white_background"/>
+      android:layout_height="match_parent"
+      android:paddingLeft="16dp"
+      android:background="@color/white_background"
+      android:orientation="vertical">
+
+      <TextView
+        android:id="@+id/miwok_text_view"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:textColor="@color/white_background"
+        android:textSize="22dp"/>
 
 
-    <TextView
-      android:id="@+id/english_text_view"
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:layout_weight="1"
-      android:gravity="top"/>
+      <TextView
+        android:id="@+id/english_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top"/>
 
-  </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+      android:id="@+id/iv_play_icon"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_marginRight="16dp"
+      android:layout_alignRight="@id/translation_text_views"
+      android:layout_centerVertical="true"
+      android:src="@drawable/ic_play_arrow_white_24dp"/>
+
+  </RelativeLayout>
 
 </LinearLayout>
